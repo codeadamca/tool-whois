@@ -1,9 +1,12 @@
 <?php
 
+// Initialize a session
 session_start();
 
+// Include functions file
 include('functions.php');
 
+// Import env variables
 $env = file(__DIR__.'/.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
 foreach($env as $value)
@@ -12,6 +15,7 @@ foreach($env as $value)
   define($value[0], $value[1]);
 }
 
+// Check if domain is a valid format
 if(is_valid_domain($_POST['domain']) == false)
 {
 
@@ -20,6 +24,7 @@ if(is_valid_domain($_POST['domain']) == false)
 
 }
 
+// Initiate API WHOIS call
 $curl = curl_init();
 
 curl_setopt_array($curl, [
@@ -36,11 +41,13 @@ curl_setopt_array($curl, [
 	],
 ]);
 
+// Execute API call
 $response = curl_exec($curl);
 $err = curl_error($curl);
 
 curl_close($curl);
 
+// Check for API call errors
 if ($err) 
 {
 	header('Location: /?api');
@@ -55,8 +62,10 @@ if($response['status'] != 'ok')
     die();
 }
 
+// Temporarily use a static JSON file for testing
 // $response = file_get_contents('brickmmo.com.json');
 
+// Save domain and API response to session
 $_SESSION['domain'] = $_POST['domain'];
 $_SESSION['response'] = $response;
 
@@ -66,5 +75,6 @@ print_r($response);
 echo '</pre>';
 */
 
+// Redirect to details page
 header('Location: details.php');
 die();

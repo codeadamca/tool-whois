@@ -1,7 +1,9 @@
 <?php
 
+// Initialize a session
 session_start();
 
+// Move session data to variables and filter API data to response
 $domain = $_SESSION['domain'];
 $response = $_SESSION['response'];
 $response = $response['data'];
@@ -36,7 +38,6 @@ die();
     </p>
 
     <h2>Domain Details</h2>
-
 
     <p>
         Registry Domain ID: <?=$response['Registry Domain ID']?>
